@@ -1,22 +1,22 @@
-const express = require("express");
-const {checkJwt, checkUid, checkTid} = require('./web-auth')
+const { Router } = require("express");
+const { checkJwt, checkUid, checkTid } = require('./web-auth')
 const { externalGet, tenantGet, tenantPut, subjectGet, subjectPut } = require("./web-endpoint")
 
-const externalRoute = express.Router()
+const externalRoute = Router()
   .use(checkUid, checkTid)
   .get("/", externalGet);
 
-const tenantRoute = express.Router()
+const tenantRoute = Router()
   .get("/", tenantGet)
   .put("/", tenantPut);
 
 
-const subjectRoute = express.Router()
+const subjectRoute = Router()
   .use(checkTid)
   .get("/", subjectGet)
   .put("/", subjectPut);
 
-const api = express.Router()
+const api = Router()
 api.use(checkJwt)
 api.use('/external', externalRoute)
 api.use('/tenant', tenantRoute)

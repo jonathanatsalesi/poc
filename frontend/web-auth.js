@@ -28,8 +28,10 @@ const audience = cfg.authorizationParams.audience
 const issuerBaseURL = `https://${cfg.domain}`
 
 const checkJwt = auth({ audience, issuerBaseURL });
-const checkTid = claimCheck((jwt) => !!jwt.tenant)
-const checkUid = claimCheck((jwt) => !!jwt.uid, "undefined uid")
+const hasTenant = (jwt) => !!jwt.tenant
+const checkTid = claimCheck(hasTenant, "undefined tenant")
+const hasUid = (jwt) => !!jwt.uid
+const checkUid = claimCheck(hasUid, "undefined uid")
 
 module.exports = {
   manageapi, checkJwt, checkTid, checkUid

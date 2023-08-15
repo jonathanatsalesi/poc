@@ -26,7 +26,7 @@ const tenantPut = async (req, res) => {
   metadata[`${config.tenant}/claims/tenant`] = tenant
   metadata[`${config.tenant}/claims/${tenant}/schema_pre`] = 'FooBar'
   try {
-    await mgtclient.updateAppMetadata({ id: req.auth.payload.id }, metadata)
+    await mgtclient.updateAppMetadata({ id: req.auth.payload.sub }, metadata)
     res.send({
       msg: "Your access token was successfully validated!"
     });
@@ -49,7 +49,7 @@ const subjectPut = async (req, res) => {
   const metadata = {}
   metadata[`${config.tenant}/claims/${req.auth.payload.tenant}/euid`] = req.body.id
   try {
-    await mgtclient.updateAppMetadata({ id: req.auth.payload.id }, metadata);
+    await mgtclient.updateAppMetadata({ id: req.auth.payload.sub }, metadata);
     res.send({
       msg: "Your access token was successfully validated!"
     });
@@ -62,7 +62,9 @@ const externalGet = (req, res) => {
   res.send({
     uid: req.auth.payload.uid,
     euid: req.auth.payload.euid,
+    ename: S.filter((v)=>v[0]==req.auth.payload.tenant).filter((v)=>v[1]==req.auth.payload.euid),
     tenant: req.auth.payload.tenant,
+    schema_pre: req.auth.payload.schema_pre,
     msg: "Your access token was successfully validated!"
   });
 };
