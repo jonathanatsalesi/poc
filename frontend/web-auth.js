@@ -1,19 +1,9 @@
-var ManagementClient = require('auth0').ManagementClient;
+const cfg = require('./web-config')
+const { auth, claimCheck } = require('express-oauth2-jwt-bearer')
+const { ManagementClient } = require('auth0')
 
-const config = () => {
-  const cfg = require("./auth_config.json");
-  if (!cfg.domain
-    || !cfg.authorizationParams.audience
-    || !cfg.mgt
-  ) {
-    throw "Please make sure that auth_config.json is in place and populated";
-  }
-  return cfg
-}
-
-const manageapi = (cfg) => {
-  cfg = cfg || config()
-  if ( !cfg
+const manageapi = () => {
+  if (!cfg
     || !cfg.domain
     || !cfg.mgt.clientId
     || !cfg.mgt.clientSecret
@@ -34,6 +24,13 @@ const manageapi = (cfg) => {
   return new ManagementClient(opts);
 }
 
+const audience = cfg.authorizationParams.audience
+const issuerBaseURL = `https://${cfg.domain}`
+
+const checkJwt = auth({ audience, issuerBaseURL });
+const checkTid = claimCheck((jwt) => !!jwt.tenant)
+const checkUid = claimCheck((jwt) => !!jwt.uid, "undefined uid")
+
 module.exports = {
-  config, manageapi
+  manageapi, checkJwt, checkTid, checkUid
 }
