@@ -9,5 +9,7 @@
     "aud":"{AUTH0_MANAGEMENT_API_IDENTIFIER}",
     "clientId":"{AUTH0_MANAGEMENT_API_CLIENT_ID}",
     "clientSecret":"{AUTH0_MANAGEMENT_API_CLIENT_SECRET}",
-  }
+  },
+  // location of the redirect to /authorize for resource initiated login flow (must be https)
+  "tenantLoginUrl": "{TENANT_LOGIN_URL}"
 }

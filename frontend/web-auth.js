@@ -1,6 +1,6 @@
 const cfg = require('./web-config')
 const { auth, claimCheck } = require('express-oauth2-jwt-bearer')
-const { ManagementClient } = require('auth0')
+const { ManagementClient, AuthenticationClient } = require('auth0')
 
 const manageapi = () => {
   if (!cfg
@@ -24,6 +24,10 @@ const manageapi = () => {
   return new ManagementClient(opts);
 }
 
+const authapi = () => {
+  return new AuthenticationClient({domain:cfg.domain, clientId: cfg.mgt.clientId, clientSecret: cfg.mgt.clientSecret})
+}
+
 const audience = cfg.authorizationParams.audience
 const issuerBaseURL = `https://${cfg.domain}`
 
@@ -34,5 +38,5 @@ const hasUid = (jwt) => !!jwt.uid
 const checkUid = claimCheck(hasUid, "undefined uid")
 
 module.exports = {
-  manageapi, checkJwt, checkTid, checkUid
+  authapi, manageapi, checkJwt, checkTid, checkUid
 }
