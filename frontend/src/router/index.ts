@@ -4,6 +4,7 @@ import Profile from "../views/Profile.vue";
 import Subject from "../views/Subject.vue";
 import ExternalApi from "../views/ExternalApi.vue";
 import Tenant from "../views/Tenant.vue";
+import Login from "../components/Login.vue";
 import { createAuthGuard } from "@auth0/auth0-vue";
 import { App } from 'vue';
 
@@ -14,7 +15,11 @@ export function createRouter(app: App): Router {
         path: "/",
         name: "home",
         component: Home,
-        beforeEnter: createAuthGuard(app)
+      },
+      {
+        path: "/login",
+        name: "login",
+        component: Login,
       },
       {
         path: "/profile",
@@ -44,3 +49,4 @@ export function createRouter(app: App): Router {
     history: createWebHashHistory()
   })
 }
+
