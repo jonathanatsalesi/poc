@@ -1,10 +1,24 @@
 <script lang="ts">
 import { useAuth0 } from '@auth0/auth0-vue';
+import { useRoute } from 'vue-router';
 
 export default {
   name: "Login",
   setup() {
-    window.location = `https://dev-f7sryk8l4taw52yj.uk.auth0.com/authorize?response_type=code&client_id=jO5Zggmr3izMN4azZTuv3rASheGP9LZ8&redirect_uri=https://azrofrontend.z13.web.core.windows.net/&`+ window.location.search
+    const { loginWithRedirect } = useAuth0();
+    const route = useRoute();
+    // Accessing query parameters with type checks
+    const organization = typeof route.query.organization === 'string' ? route.query.organization : undefined;
+    const invitation = typeof route.query.invitation === 'string' ? route.query.invitation : undefined;
+    console.log(route.query);
+    console.log(route.params)
+    // Using a redirect
+    loginWithRedirect({
+      authorizationParams: {
+        organization,
+        invitation,
+      }
+    });
   }
 };
 </script>
