@@ -55,18 +55,32 @@ This code is a example of a backend system that can interact with Auth0 Manageme
 ### Function: `onExecutePostLogin`
 
 ```JavaScript
+/**
+* Handler that will be called during the execution of a PostLogin flow.
+*
+* @param {Event} event - Details about the user and the context in which they are logging in.
+* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.
+*/
 exports.onExecutePostLogin = async (event, api) => {
-  api.accessToken.setCustomClaim("id", event.user.user_id)
-  api.accessToken.setCustomClaim("uid", event.user.app_metadata[`${event.tenant.id}/claims/uid`])
+  //api.accessToken.setCustomClaim("id", event.user.user_id)
+  const uid = event.user.app_metadata[`${event.tenant.id}/claims/uid`]
+  api.accessToken.setCustomClaim("uid", uid)
+  api.idToken.setCustomClaim("uid", uid)
   let tenant = event.user.app_metadata[`${event.tenant.id}/claims/tenant`]
-  api.accessToken.setCustomClaim("tenant",tenant)
+  api.accessToken.setCustomClaim("tenant", tenant)
+  api.idToken.setCustomClaim("tenant", tenant)
+  // access_token email claim
+  api.accessToken.setCustomClaim("email", event.user.email)
+  // tenant scoped claims
   if (!!tenant) {
-    let eid = `${event.tenant.id}/claims/${tenant}/euid`  
-    api.accessToken.setCustomClaim("euid", event.user.app_metadata[eid])
-    let scm = `${event.tenant.id}/claims/${tenant}/scm`  
+    const euid = event.user.app_metadata[`${event.tenant.id}/claims/${tenant}/euid`]
+    api.accessToken.setCustomClaim("euid", euid)
+    api.idToken.setCustomClaim("euid", euid)
+    let scm = `${event.tenant.id}/claims/${tenant}/schema_pre`  
     api.accessToken.setCustomClaim("schema_pre", event.user.app_metadata[scm])
   }
 };
+
 ```
 
 #### Purpose:
