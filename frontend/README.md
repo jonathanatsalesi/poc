@@ -133,7 +133,7 @@ To do this, first copy `auth_config.sample.json` into a new file in the same fol
 
 ```json
 {
-  "tenant": "{AUTH0_TENANT_ID},
+  "tenant": "{AUTH0_TENANT_ID}",
   "domain": "{AUTH0_TENANT_DOMAIN}",
   "clientId": "{AUTH0_TENANT_CLIENT_ID}",
   "authorizationParams": {
