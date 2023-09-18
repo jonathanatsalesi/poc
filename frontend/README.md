@@ -133,18 +133,32 @@ To do this, first copy `auth_config.sample.json` into a new file in the same fol
 
 ```json
 {
-  "domain": "<YOUR AUTH0 DOMAIN>",
-  "clientId": "<YOUR AUTH0 CLIENT ID>",
-  "audience": "<YOUR AUTH0 API IDENTIFIER>"
+  "tenant": "{AUTH0_TENANT_ID},
+  "domain": "{AUTH0_TENANT_DOMAIN}",
+  "clientId": "{AUTH0_TENANT_CLIENT_ID}",
+  "authorizationParams": {
+    "audience": "{API_IDENTIFIER}"
+  },
+  "mgt": {
+    "aud":"{AUTH0_MANAGEMENT_API_IDENTIFIER}",
+    "clientId":"{AUTH0_MANAGEMENT_API_CLIENT_ID}",
+    "clientSecret":"{AUTH0_MANAGEMENT_API_CLIENT_SECRET}",
+  }
 }
 ```
 
 ### Running in development
 
-This compiles and serves the Vue app, and starts the backend API server on port 3001:
+This compiles and serves the Vue app:
 
 ```bash
 npm run serve
+```
+
+This runs the backend api:
+
+```bash
+node web-server.js
 ```
 
 ## Deployment
@@ -154,10 +168,6 @@ npm run serve
 ```bash
 npm run build
 ```
-
-### Docker build
-
-To build the Docker image run `exec.sh`, or `exec.ps1` on Windows.
 
 ### Lints and fixes files
 
